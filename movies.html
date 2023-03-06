@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <Style>
+        td {
+            border: 1px solid black;
+            padding: 3px
+        }
+
+        li {
+            display: inline-block;
+            padding: 10px
+        }
+    </Style>
+</head>
+<body>
+    <h1>영화 리스트 보기</h1>
+    <a href="register.html">영화 등록하러 가기</a>
+    <table style="border: 1px solid black">
+        <tr>
+            <th>ID</th>
+            <th>제목</th>
+            <th>등록자</th>
+            <th>조회수</th>
+            <th>등록날자</th>
+        </tr>
+        <tbody id="movies">
+        </tbody>
+    </table>
+    <ul id="pagination">
+
+    </ul>
+</body>
+</html>
+<script>
+    const urlSearch = new URLSearchParams(location.search);
+    const page = urlSearch.get('page') || 1
+    console.log(page)
+    fetch(`http://localhost:3100/movies?page=${page}`)
+        .then((response) => response.json())
+        .then(movies => {
+            console.log(movies)
+            const html = movies.movies.map(movie => {
+                return `
+                <tr>
+                    <td>${movie.id}</td>
+                    <td><a href="movie.html?id=${movie.id}">${movie.movie_title}</a></td>
+                    <td>${movie.name}</td>
+                    <td>${movie.hit_count}</td>
+                    <td>${movie.created_at}</td>
+                </tr>`
+            })
+            document.getElementById("movies").innerHTML = html.join('')
+
+
+            const lastPage = movies.pageInfo.lastPage
+            const pages = []
+            for (let i = 1;  i <= lastPage; i++) {
+                pages.push(`<li><a href="?page=${i}">${i}</a></li>`)
+            }
+            document.getElementById("pagination").innerHTML = pages.join('')
+
+        });
+</script>

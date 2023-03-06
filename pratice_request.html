@@ -1,0 +1,34 @@
+<h1>서버로 요청 테스트</h1>
+<script>
+
+    // 영화 리스트
+    fetch('http://localhost:3100/movies')
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("전체 영화 가져오기 : ", data)
+        });
+
+    // 영화 하나 가져오기
+    fetch('http://localhost:3100/movies/1')
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("영화 하나 가져오기 :",  data)
+        });
+
+
+    // 영화 등록하기
+    fetch('http://localhost:3100/movies', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            movie_title: "avatar3",
+            user_id: 9
+        }), // body의 데이터 유형은 반드시 "Content-Type" 헤더와 일치해야 함
+    }).then((response) => response.json())
+        .then((data) => {
+            console.log("register 결과 : ", data)
+        });
+
+</script>
